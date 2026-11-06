@@ -1,4 +1,5 @@
 alias c='clear'
 alias a='cd / && cd workspaces && cd "1.Sınıf Okuma"'
-alias gunc='read -p "Commit mesajını girin: " msg && git add . && git commit -m "$msg" && git push origin main'
+alias gunc='read -p "Update ismini girin: " update_name && git add . && git commit -m "$update_name" && git push origin "$(git branch --show-current 2>/dev/null || echo main)"'
+alias update='gunc'
 alias s='source ~/.bashrc'
