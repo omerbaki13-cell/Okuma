@@ -3,24 +3,109 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>1. Sınıf Okuma</title>
   <style>
+    body {
+      margin: 0;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px;
+      background: #000;
+    }
+
+    nav a {
+      padding: 10px 14px;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    nav a:hover,
+    nav a[aria-current="page"] {
+      background: #333;
+      border-radius: 4px;
+    }
+
     [data-visible] button {
       display: block;
       margin: 0 auto;
     }
+
+    .ana-sayfa-icerik {
+      max-width: 800px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+
+    .ana-sayfa-gorseli {
+      display: block;
+      width: min(100%, 640px);
+      max-height: 360px;
+      margin: 0 auto 24px;
+      object-fit: cover;
+    }
+
+    .muzik-gorseli {
+      display: inline-block;
+      margin: 24px 0 16px;
+      overflow: hidden;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      line-height: 0;
+    }
+
+    .muzik-gorseli img {
+      display: block;
+      width: min(320px, 80vw);
+      height: 180px;
+      background: #f3f4f6;
+    }
+
+    .muzik-cal {
+      display: inline-block;
+      padding: 12px 24px;
+      border: 0;
+      border-radius: 999px;
+      background: #111827;
+      color: #fff;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+
+    .muzik-cal:hover {
+      background: #374151;
+      transform: translateY(-2px);
+    }
+
+    .muzik-cal:focus-visible {
+      outline: 3px solid #60a5fa;
+      outline-offset: 3px;
+    }
   </style>
 </head>
-<body style="text-align: center;">
+<body>
+  <nav aria-label="Ana gezinme">
+    <a href="#ana-sayfa">Ana Sayfa</a>
+    <a href="#harfler">Harfler</a>
+    <a href="#muzikler">Müzikler</a>
+  </nav>
 
-  <p dir="rtl" lang="ar" style="font-size: 40px;">
-   Onat
-  </p>
-
-  <button onclick="document.getElementById('ses').play()">
-    Dinleme
-  </button>
-
-  <audio id="ses" src="Sesler/Harf/onat.mp3"></audio>
+  <main>
+    <section id="ana-sayfa" class="sayfa" aria-label="Ana Sayfa">
+      <div class="ana-sayfa-icerik">
+        <img class="ana-sayfa-gorseli" src="Resimler/anasayfa.jpg" alt="Ana sayfa görseli">
+        <h1>1.Sınıf Okuma Anlama Web Siteniz</h1>
+        <p>Kardeşim 1.Sında Gidiyordu Bu Web Siteyi Yaptım Çok Daha İyi Anlamaya Başladı Harfleri.</p>
+      </div>
+    </section>
+    <section id="harfler" class="sayfa" aria-label="Harfler" hidden>
 
   <div data-visible="true">
     <p dir="rtl" lang="ar" style="font-size: 40px;">Al</p>
@@ -40,7 +125,7 @@
     <button onclick="document.getElementById('ses-3').play()">Dinleme</button>
     <audio id="ses-3" src="Sesler/Harf/oto.mp3" aria-label="Ses #3"></audio>
   </div>
-  <div data-visible="false">
+  <div data-visible="true">
     <p dir="rtl" lang="ar" style="font-size: 40px;">Onat</p>
     <!-- 4. Buton -->
     <button onclick="document.getElementById('ses-4').play()">Dinleme</button>
@@ -143,10 +228,66 @@
     <audio id="ses-20" src="Sesler/Harf/onat.mp3" aria-label="Ses #20"></audio>
   </div>
 
+    </section>
+    <section id="muzikler" class="sayfa" aria-label="Müzikler" hidden>
+      <a class="muzik-gorseli" href="Sesler/M%C3%BCzikler/golden.mp3" aria-label="Müzik dosyasını aç">
+        <img src="Resimler/golden.jpg" alt="">
+      </a>
+      <button id="muzik-dugmesi" class="muzik-cal" type="button" aria-pressed="false">▶ Müziği Çal</button>
+      <audio id="muzik-sesi" src="Sesler/M%C3%BCzikler/golden.mp3" aria-label="Golden müziği"></audio>
+    </section>
+  </main>
+
   <script>
+    const sayfalar = document.querySelectorAll(".sayfa");
+    const gezinmeLinkleri = document.querySelectorAll("nav a");
+    const muzikSesi = document.getElementById("muzik-sesi");
+    const muzikDugmesi = document.getElementById("muzik-dugmesi");
+
     document.querySelectorAll("[data-visible='false']").forEach((item) => {
       item.hidden = true;
     });
+
+    muzikDugmesi.addEventListener("click", () => {
+      if (muzikSesi.paused) {
+        muzikSesi.play();
+      } else {
+        muzikSesi.pause();
+      }
+    });
+
+    muzikSesi.addEventListener("play", () => {
+      muzikDugmesi.textContent = "⏸ Müziği Durdur";
+      muzikDugmesi.setAttribute("aria-pressed", "true");
+    });
+
+    muzikSesi.addEventListener("pause", () => {
+      muzikDugmesi.textContent = "▶ Müziği Çal";
+      muzikDugmesi.setAttribute("aria-pressed", "false");
+    });
+
+    function sayfayiGoster() {
+      const sayfaId = window.location.hash.slice(1) || "ana-sayfa";
+      const etkinSayfa = document.getElementById(sayfaId);
+      const hedefSayfa = etkinSayfa?.classList.contains("sayfa")
+        ? etkinSayfa
+        : document.getElementById("ana-sayfa");
+
+      sayfalar.forEach((sayfa) => {
+        sayfa.hidden = sayfa !== hedefSayfa;
+      });
+
+      gezinmeLinkleri.forEach((link) => {
+        if (link.hash === `#${hedefSayfa.id}`) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
+    }
+
+    window.addEventListener("hashchange", sayfayiGoster);
+    sayfayiGoster();
   </script>
 
 </body>
