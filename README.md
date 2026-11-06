@@ -1,1 +1,1 @@
-# 1.S-n-f-Okuma
+# 1.Sınf Okuma
