@@ -1,0 +1,4 @@
+alias c='clear'
+alias a='cd / && cd workspaces && cd "1.Sınıf Okuma"'
+alias gunc='read -p "Commit mesajını girin: " msg && git add . && git commit -m "$msg" && git push origin main'
+alias s='source ~/.bashrc'
